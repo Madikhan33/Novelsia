@@ -1,0 +1,20 @@
+{
+  "name": "novelsia",
+  "version": "1.0.0",
+  "description": "Современное рабочее пространство для писателей",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.3.8",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.5.0",
+    "vite": "^5.0.0"
+  },
+  "type": "module"
+}
