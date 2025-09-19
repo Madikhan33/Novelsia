@@ -59,20 +59,7 @@
       
       <!-- Действия -->
       <div class="nav-actions">
-        <!-- Информация о пользователе -->
-        <div v-if="isAuthenticated" class="user-info">
-          <span class="user-greeting">{{ userGreeting }}</span>
-          <button @click="handleLogout" class="btn btn-outline logout-btn" title="Выйти из аккаунта">
-            Выход
-          </button>
-        </div>
-        <div v-else class="auth-actions">
-          <button @click="$emit('show-auth')" class="btn btn-primary">
-            Войти
-          </button>
-        </div>
-        
-        <!-- Основные действия -->
+        <!-- Основные действия переносим влево -->
         <div class="primary-actions">
           <button 
             @click="$emit('save')" 
@@ -107,43 +94,57 @@
             <span class="btn-text">Главы</span>
             <span class="badge" v-if="chaptersCount > 0">{{ chaptersCount }}</span>
           </button>
-        </div>
-        
-        <!-- Дополнительные действия -->
-        <div class="secondary-actions">
-          <div class="dropdown" ref="dropdownRef">
-            <button 
-              @click="toggleDropdown"
-              class="btn btn-icon"
-              title="Дополнительные действия"
-            >
-              Еще
-            </button>
-            
-            <div class="dropdown-menu" v-show="dropdownOpen">
-              <button @click="handleExport('json')" class="dropdown-item">
-                Экспорт JSON
+
+          <div class="secondary-actions">
+            <div class="dropdown" ref="dropdownRef">
+              <button 
+                @click="toggleDropdown"
+                class="btn btn-icon"
+                title="Дополнительные действия"
+              >
+                Еще
               </button>
-              <button @click="handleExport('txt')" class="dropdown-item">
-                Экспорт TXT
-              </button>
-              <label class="dropdown-item file-input-wrapper">
-                Импорт
-                <input 
-                  type="file" 
-                  accept=".json,.txt"
-                  @change="handleImport"
-                  class="file-input"
-                />
-              </label>
-              <div class="dropdown-divider"></div>
-              <button @click="showStats" class="dropdown-item">
-                Статистика
-              </button>
-              <button @click="showSettings" class="dropdown-item">
-                Настройки
-              </button>
+              
+              <div class="dropdown-menu" v-show="dropdownOpen">
+                <button @click="handleExport('json')" class="dropdown-item">
+                  Экспорт JSON
+                </button>
+                <button @click="handleExport('txt')" class="dropdown-item">
+                  Экспорт TXT
+                </button>
+                <label class="dropdown-item file-input-wrapper">
+                  Импорт
+                  <input 
+                    type="file" 
+                    accept=".json,.txt"
+                    @change="handleImport"
+                    class="file-input"
+                  />
+                </label>
+                <div class="dropdown-divider"></div>
+                <button @click="showStats" class="dropdown-item">
+                  Статистика
+                </button>
+                <button @click="showSettings" class="dropdown-item">
+                  Настройки
+                </button>
+              </div>
             </div>
+          </div>
+        </div>
+
+        <!-- Информация о пользователе справа -->
+        <div class="user-section">
+          <div v-if="isAuthenticated" class="user-info">
+            <span class="user-greeting">{{ userGreeting }}</span>
+            <button @click="handleLogout" class="btn btn-outline logout-btn" title="Выйти из аккаунта">
+              Выход
+            </button>
+          </div>
+          <div v-else class="auth-actions">
+            <button @click="$emit('show-auth')" class="btn btn-primary">
+              Войти
+            </button>
           </div>
         </div>
       </div>
@@ -221,7 +222,7 @@ export default {
     // Вычисляемые свойства
     const userGreeting = computed(() => {
       if (!props.user) return 'Гость'
-      return `Привет, ${props.user.username || props.user.email || 'Пользователь'}!`
+      return `${props.user.username || props.user.email || 'Пользователь'}!`
     })
     
     // Вычисляемые свойства
@@ -388,7 +389,7 @@ export default {
 
 .nav-container {
   height: 100%;
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 0 1.5rem;
   display: grid;
@@ -400,8 +401,10 @@ export default {
 /* Бренд */
 .nav-brand {
   display: flex;
+  justify-content: flex-start;
   align-items: center;
   min-width: 0;
+  
 }
 
 .brand-section {
@@ -436,7 +439,7 @@ export default {
 .nav-center {
   min-width: 0;
   max-width: 600px;
-  margin: 0 auto;
+  margin-right: 0;
 }
 
 .chapter-info {
@@ -444,10 +447,8 @@ export default {
   align-items: center;
   gap: 1.5rem;
   justify-content: flex-start;
-  margin: 0 auto;
-  max-width: 800px;
+  max-width: 100px;
   width: 100%;
-  padding: 0 1rem;
 }
 
 .input-group {
@@ -508,13 +509,14 @@ export default {
 }
 
 .stats-grid {
-  display: grid;
+  display: flex;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  gap: 1.2rem;
   text-align: center;
 }
 
 .stat-item {
+  justify-content: space-around;
   display: flex;
   flex-direction: column;
   gap: 0.125rem;
@@ -524,15 +526,15 @@ export default {
 .stat-label {
   font-size: 0.75rem;
   font-weight: 500;
-  color: var(--color-secondary);
+  color: var(--color-black);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .stat-value {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 600;
-  color: var(--color-primary);
+  color: var(--color-black);
   font-variant-numeric: tabular-nums;
   transition: var(--transition);
 }
@@ -545,22 +547,34 @@ export default {
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  justify-content: flex-end;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.primary-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-right: 80px;
+}
+
+.user-section {
+  margin-left: auto; /* Прижимаем к правому краю */
+  display: flex;
+  align-items: center;
 }
 
 .user-info {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding-right: 1rem;
-  border-right: 1px solid var(--color-border);
+  gap: 0.5rem;
 }
 
 .user-greeting {
   font-size: 0.875rem;
   color: var(--color-secondary);
   white-space: nowrap;
+  margin-right: 0.5rem;
 }
 
 .auth-actions {
@@ -585,11 +599,6 @@ export default {
 .btn-primary:hover {
   background: var(--color-gray-800);
   border-color: var(--color-gray-800);
-}
-
-.primary-actions {
-  display: flex;
-  gap: 0.5rem;
 }
 
 .secondary-actions {
@@ -854,4 +863,4 @@ export default {
     justify-content: center;
   }
 }
-</style> 
+</style>
